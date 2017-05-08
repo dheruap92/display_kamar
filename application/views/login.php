@@ -29,7 +29,7 @@
             </div><!-- /.login-logo -->
             <div class="login-box-body">
                 <p class="login-box-msg">Form Login Page</p>
-                <form action="<?php echo base_url() ?>auth/cek_login" method="post" onsubmit="return cekLogin()">
+                <form action="<?php echo base_url() ?>auth/login" method="post">
                   <div class="form-group has-feedback">
                     <input type="username" class="form-control" placeholder="Username" name="username" id="username">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -38,27 +38,16 @@
                     <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                   </div>
-                  <div class="form-group has-feedback">
-                    <select class="form-control" name="loket_login" id="loket_login">
-                        <option value="poli1">Poli Lantai 1</option>
-                        <option value="poli2">Poli Lantai 2</option>
-                    </select>
-                  </div>
                   <div class="row">
+                    <div class="col-xs-12">
+                      <p class='text-red center'><?php echo $this->session->flashdata("message"); ?><p> 
+                    </div>
                     <div class="col-xs-8">
                       <div class="checkbox icheck">
                         <label>
                           <input type="checkbox" name='remember_me'> Remember Me
                         </label>
                       </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <?php
-                          $info = $this->session->flashdata('info');
-                          if (!empty($info)) {
-                          echo "<p class='text-red center'>Password dan Username Tidak Dikenal<p>"; 
-                          }
-                        ?>
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
@@ -67,7 +56,6 @@
                     <!-- /.col -->
                   </div>
                 </form>
-                <div class="pull-right"><a href="<?php echo site_url("panel") ?>" target="_blank" class="text-right">Go To Panel</a></div>
 
             </div><!-- /.login-box-body -->
         </div><!-- /.login-box -->
