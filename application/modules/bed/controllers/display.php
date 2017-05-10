@@ -2,14 +2,14 @@
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Bed extends CI_Controller {
+class Display extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
 	}
 	
 	public function index(){
-		$this->load->view("bed_view");
+		$this->load->view("display_view");
 	}
 
 }
