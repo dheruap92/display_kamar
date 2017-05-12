@@ -7,7 +7,7 @@ $(document).ready(function(){
  
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": base_url+"video/ajax_list",
+            "url": base_url+"bed/admin/paviliun/list",
             "type": "POST",
             "error" : function (status) {
                 console.log(status.responseText);
@@ -17,13 +17,19 @@ $(document).ready(function(){
         //Set column definition initialisation properties.
         "columnDefs": [
         {
-        	"targets": [ 0 ], //last column
+            "targets": [ 0 ], //last column
             "orderable": false, //set not orderable
         },{ 
             "targets": [ -1 ], //last column
             "orderable": false, //set not orderable
         },
         ],
+    });
+
+     //Date picker
+    $('.datepicker').datepicker({
+      format: 'yyyy/mm/dd',
+      autoclose: true
     });
 
      //set input/textarea/select event when change value, remove class error and remove text help block 
@@ -44,7 +50,6 @@ $(document).ready(function(){
     $("#check-all").click(function() {
         $(".data-check").prop('checked',$(this).prop('checked'));
     });
-
 
 });
 
@@ -67,49 +72,46 @@ function save() {
     $('#btnSave').attr('disabled',true); //set button disable
 
     var url,alert_text;
-    if (save_method==='add') {
-        url = base_url+"video/ajax_add";
+    if (save_method=='add') {
+        url = base_url+"bed/admin/paviliun/tambah";
         alert_text = "Data Berhasil Ditambahkan";
     } else {
-        url = base_url+"video/ajax_update";
+        url = base_url+"bed/admin/paviliun/ubah";
         alert_text = "Data Berhasi Di Update";
     }
 
 
     // ajax add data
-    var formData = new FormData($('#form')[0]);
-    // console.log(formData);
-    // return false;
+    var formData = $("#form").serialize();
+    console.log(formData);
     $.ajax({
         url : url,
         type: "POST",
         data: formData,
-        contentType: false,
-        processData: false,
         dataType: "JSON",
         success: function(data)
-        {
+        { 
             if(data.status) //if success close modal and reload ajax table
             {
                 $('#modal_form').modal('hide');
+                bootbox.alert(alert_text);
                 reload_table();
+            } else {
+                for (i=0;i<data.inputerror.length;i++) {
+                    $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error');
+                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                } 
             }
-            else
-            {
-                for (var i = 0; i < data.inputerror.length; i++) 
-                {
-                    $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error'); //select parent twice to select div form-group class and add has-error class
-                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-                }
-            }
+ 
             $('#btnSave').text('save'); //change button text
             $('#btnSave').attr('disabled',false); //set button enable 
  
  
         },
-        error: function (jqXHR, textStatus, errorThrown)
+        error: function (e)
         {
-            alert('Error adding / update data');
+            bootbox.alert('Error adding / update data');
+            console.log(e);
             $('#btnSave').text('save'); //change button text
             $('#btnSave').attr('disabled',false); //set button enable 
  
@@ -121,9 +123,9 @@ function hapus(id) {
     bootbox.confirm("Are you sure?", function(result) {
         if(result) {
             $.ajax({
-                url : base_url+"video/ajax_delete/"+id,
+                url : base_url+"bed/admin/paviliun/hapus",
                 type: "POST",
-                data: $('#form').serialize(),
+                data: {"id":id},
                 dataType: "JSON",
                 success: function(data)
                 {
@@ -154,17 +156,15 @@ function update(id)
  
     //Ajax Load data from ajax
     $.ajax({
-        url : base_url+"video/ajax_edit/"+id,
-        type: "GET",
+        url : base_url+"bed/admin/paviliun/edit/",
+        type: "POST",
+        data : {"id":id},
         dataType: "JSON",
         success: function(data)
         {
-            console.log(data.publish);
-            //return false;
-            $('[name="id_pk"]').val(data.id);
-            $('[name="judul"]').val(data.judul);
-           // $('[name="video_name"]').val(data.nama_file);
-            $('#enable'+0).attr("checked",'checked');
+            $('[name="id_pk"]').val(data.id_paviliun);
+            $('[name="nama_paviliun"]').val(data.nama_paviliun);
+            $('[name="keterangan"]').val(data.keterangan);
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Edit faq'); // Set title to Bootstrap modal title
  
@@ -176,3 +176,37 @@ function update(id)
         }
     });
 }
+
+function bulk_delete() {
+    var list_id = [];
+    $('.data-check:checked').each(function() {
+        list_id.push(this.value);
+    });
+    if (list_id.length > 0) {
+        bootbox.confirm("Are you sure?", function(result) {
+        if(result) {
+            $.ajax({
+                url : base_url+"quote/ajax_bulk_delete/",
+                type: "POST",
+                data: {id:list_id},
+                dataType: "JSON",
+                success: function(data)
+                {
+         
+                    if(data.status) //if success close modal and reload ajax table
+                    {
+                        $('#modal_form').modal('hide');
+                        bootbox.alert("Data Berhasil Dihapus");
+                        reload_table();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    bootbox.alert('Error Delete Data');
+                }
+            });
+        }
+    });
+    }
+}
+
