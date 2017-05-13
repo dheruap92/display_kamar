@@ -101,6 +101,10 @@ class Paviliun_model extends CI_Model {
         $this->db->delete($this->table);
     }
 
+    public function getPaviliun() {
+        return $this->db->get($this->table);
+    }
+
 }
 
 /* End of file admin_model.php */

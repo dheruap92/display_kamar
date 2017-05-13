@@ -17,11 +17,8 @@
              folder instead of downloading all of them to reduce the load. -->
         <link href="<?php echo base_url('assets/AdminLTE-2.0.5/dist/css/skins/_all-skins.min.css') ?>" rel="stylesheet" type="text/css" />
 
-        <!-- ################ -->
-        <!-- Clock Stylesheet -->
-        <!-- ################ -->
-        <link rel="stylesheet" href="<?php echo base_url() ?>assets/AdminLTE-2.0.5/plugins/countdown/timeTo.css">
-
+        <!-- Select2 -->
+        <link rel="stylesheet" href="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/chosen/chosen.min.css')?>">
         <style>
             /* Important part */
             .modal-dialog{
@@ -91,7 +88,5 @@
         <!-- bootbox -->
          <script src="<?php echo base_url() ?>assets/AdminLTE-2.0.5/plugins/bootbox/bootbox.min.js"></script>
 
-        <!-- ################ -->
-        <!-- clock javascripts -->
-        <!-- ################ -->
-        <script src="<?php echo base_url() ?>assets/AdminLTE-2.0.5/plugins/countdown/jquery.time-to.js" type="text/javascript"></script>
+        <!-- jquery chosen-->
+        <script src="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/chosen/chosen.jquery.min.js')?>"></script>

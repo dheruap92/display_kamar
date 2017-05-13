@@ -122,16 +122,17 @@ class Admin extends CI_Controller {
 			$this->paviliun->delete_by_id($id);
        		echo json_encode(array("status" => TRUE));
 		} else if ($param1=="list") {
-			$list = $this->paviliun->get_datatables();
+			$list = $this->kamar->get_datatables();
 	        $data = array();
 	        // $no = $_POST['start'];
 	        foreach ($list as $r) {
 	            // $no++;
 	            $row = array();
-	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_paviliun."'>";
-	            $row[] = $r->id_paviliun;
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_kamar."'>";
+	            $row[] = $r->id_kamar;
+	            $row[] = $r->nama_kamar;
+	            $row[] = $r->kelas;
 	            $row[] = $r->nama_paviliun;
-	            $row[] = $r->keterangan;
 	            //add html for action
 	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_paviliun."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
 	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_paviliun."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
@@ -153,9 +154,21 @@ class Admin extends CI_Controller {
 				'p'			=> 'admin/kamar_view',
 				'link1'		=> 'Admin',
 				'link2'		=> 'kamar',
+				'paviliun'	=> $this->loadPaviliun()
 			);
 			$this->load->view("admin_view",$data);
 		}
+	}
+
+	function loadPaviliun() {
+		$data_kamar = $this->paviliun->getPaviliun();
+
+		$select = '<select class="form-control select3" style="width: 100%;">';
+        foreach ($data_kamar->result() as $row) {
+        	$select.= "<option value=".$row->id_paviliun.">".strtoupper($row->nama_paviliun)."</option>";
+        }
+        $select.='</select>';
+        return $select;
 	}
 
 

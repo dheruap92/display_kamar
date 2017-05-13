@@ -40,18 +40,20 @@
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
                                   <th>ID</th>
-                                  <th>Nama Paviliun</th>
-                                  <th>Keterangan</th>
-                                  <th>aksi</th>
+                                  <th>Nama Kamar</th>
+                                  <th>Kelas</th>
+                                  <th>Paviliun</th>
+                                  <th>Aksi</th>
                               </tr>
                           </thead>
                           <tfoot>
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
                                   <th>ID</th>
-                                  <th>Nama Paviliun</th>
-                                  <th>Keterangan</th>
-                                  <th>aksi</th>
+                                  <th>Nama Kamar</th>
+                                  <th>Kelas</th>
+                                  <th>Paviliun</th>
+                                  <th>Aksi</th>
                               </tr>
                           </tfoot>
                         <div>
@@ -76,6 +78,11 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                       <form role="form">
+                        <div class="form-group">
+                          <label class="control-label" >Paviliun</label>
+                         <?php echo $paviliun ?>
+                          <span class="help-block">Help block with error</span>
+                        </div>
                         <div class="form-group has-error">
                           <label class="control-label" >Nama Paviliun</label>
                           <input type="hidden" class="form-control input-sm" id="id_pk" name="id_pk" placeholder="Enter ..." >
@@ -87,6 +94,8 @@
                           <input type="text" class="form-control input-sm" id="keterangan" name="keterangan" placeholder="Enter ...">
                           <span class="help-block">Help block with error</span>
                         </div>
+                      
+
                       </form>
                     </div>
                     <!-- /.box-body -->
@@ -106,5 +115,6 @@
 <script>	
 	var base_url = "<?php echo base_url() ?>";
 </script>
-<script type="text/javascript" src="<?php echo base_url()?>assets/aplikasi/js/paviliun.js"> </script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/aplikasi/js/kamar.js"> </script>
+
 
