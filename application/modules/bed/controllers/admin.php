@@ -163,13 +163,20 @@ class Admin extends CI_Controller {
 	function loadPaviliun() {
 		$data_kamar = $this->paviliun->getPaviliun();
 
-		$select = '<select class="form-control select3" style="width: 100%;">';
+		$select = '<select class="form-control select2" style="width: 100%;">';
         foreach ($data_kamar->result() as $row) {
         	$select.= "<option value=".$row->id_paviliun.">".strtoupper($row->nama_paviliun)."</option>";
         }
         $select.='</select>';
         return $select;
 	}
+
+
+	public function form() {
+		$this->load->view("admin/form_view");
+	}
+
+
 
 
 

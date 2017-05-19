@@ -41,20 +41,10 @@ $(document).ready(function(){
         $(this).parent().removeClass('has-error');
         $(this).next().empty();
     });
-    $("select").change(function(){
-        $(this).parent().removeClass('has-error');
-        $(this).next().empty();
-    });
 
     // ceck all selecter
     $("#check-all").click(function() {
         $(".data-check").prop('checked',$(this).prop('checked'));
-    });
-
-    $(".select3").chosen({
-        no_results_text: "Oops, nothing found!",
-        width: "95%",
-        hide_results_on_select : true
     });
 
 });
