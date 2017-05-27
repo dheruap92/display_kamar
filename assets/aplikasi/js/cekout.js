@@ -7,7 +7,7 @@ $(document).ready(function(){
  
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": base_url+"bed/admin/kamar/list",
+            "url": base_url+"bed/reservasi/cekout/list",
             "type": "POST",
             "error" : function (status) {
                 console.log(status.responseText);
@@ -69,10 +69,10 @@ function save() {
 
     var url,alert_text;
     if (save_method=='add') {
-        url = base_url+"bed/admin/kamar/tambah";
+        url = base_url+"bed/reservasi/cekout/tambah";
         alert_text = "Data Berhasil Ditambahkan";
     } else {
-        url = base_url+"bed/admin/kamar/ubah";
+        url = base_url+"bed/reservasi/cekout/ubah";
         alert_text = "Data Berhasi Di Update";
     }
 
@@ -118,7 +118,7 @@ function hapus(id) {
     bootbox.confirm("Are you sure?", function(result) {
         if(result) {
             $.ajax({
-                url : base_url+"bed/admin/kamar/hapus",
+                url : base_url+"bed/reservasi/cekout/hapus",
                 type: "POST",
                 data: {"id":id},
                 dataType: "JSON",
@@ -151,7 +151,7 @@ function update(id)
  
     //Ajax Load data from ajax
     $.ajax({
-        url : base_url+"bed/admin/kamar/edit/",
+        url : base_url+"bed/reservasi/cekout/edit/",
         type: "POST",
         data : {"id":id},
         dataType: "JSON",

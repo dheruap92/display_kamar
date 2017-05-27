@@ -7,7 +7,7 @@ $(document).ready(function(){
  
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": base_url+"bed/admin/kamar/list",
+            "url": base_url+"bed/admin/bed/list",
             "type": "POST",
             "error" : function (status) {
                 console.log(status.responseText);
@@ -47,6 +47,25 @@ $(document).ready(function(){
         $(".data-check").prop('checked',$(this).prop('checked'));
     });
 
+    $("#id_paviliun").change(function (){
+        var id = $("#id_paviliun").val();
+        $.ajax({
+            url     : base_url+"bed/admin/loadKamar/"+id ,
+            method  : "POST",
+            data    : {"id":id},
+            dataType: "JSON",
+            success : function (data) {
+                $("#id_kamar").html("");
+                $.each(data,function(i,data){
+                    $("#id_kamar").append("<option value='"+data.id_kamar+"'>"+data.nama_kamar+"</option>");
+                });
+            },
+            error : function (e) {
+                console.log(e.responseText);
+            }
+        });
+    });
+
 });
 
 // reload table
@@ -69,10 +88,10 @@ function save() {
 
     var url,alert_text;
     if (save_method=='add') {
-        url = base_url+"bed/admin/kamar/tambah";
+        url = base_url+"bed/admin/bed/tambah";
         alert_text = "Data Berhasil Ditambahkan";
     } else {
-        url = base_url+"bed/admin/kamar/ubah";
+        url = base_url+"bed/admin/bed/ubah";
         alert_text = "Data Berhasi Di Update";
     }
 
@@ -118,7 +137,7 @@ function hapus(id) {
     bootbox.confirm("Are you sure?", function(result) {
         if(result) {
             $.ajax({
-                url : base_url+"bed/admin/kamar/hapus",
+                url : base_url+"bed/admin/bed/hapus",
                 type: "POST",
                 data: {"id":id},
                 dataType: "JSON",
@@ -151,16 +170,16 @@ function update(id)
  
     //Ajax Load data from ajax
     $.ajax({
-        url : base_url+"bed/admin/kamar/edit/",
+        url : base_url+"bed/admin/bed/edit/",
         type: "POST",
         data : {"id":id},
         dataType: "JSON",
         success: function(data)
         {
-            $('[name="id_pk"]').val(data.id_kamar);
-            $('[name="nama_kamar"]').val(data.nama_kamar);
+            $('[name="id_pk"]').val(data.id_bed);
             $('[name="id_paviliun"]').val(data.id_paviliun);
-            $('[name="kelas"]').val(data.kelas);
+            $('[name="id_kamar"]').val(data.id_kamar);
+            $('[name="no_bed"]').val(data.no_bed);
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Edit faq'); // Set title to Bootstrap modal title
  

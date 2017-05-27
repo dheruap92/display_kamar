@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Kamar_model extends CI_Model {
+class Bed_model extends CI_Model {
 
-	var $table = 'm_kamar';
-    var $column_order = array('id_kamar','nama_kamar','kelas','nama_paviliun',null); //set column field database for datatable orderable
-    var $column_search = array('id_kamar','nama_kamar','kelas','nama_paviliun'); //set column field database for datatable searchable just firstname , lastname , address are searchable
-    var $order = array('id_kamar' => 'asc'); // default order 
+	var $table = 'm_bed';
+    var $column_order = array('id_bed','no_bed','id_kamar','status',null); //set column field database for datatable orderable
+    var $column_search = array('id_bed','no_bed','id_kamar','status'); //set column field database for datatable searchable just firstname , lastname , address are searchable
+    var $order = array('id_bed' => 'asc'); // default order 
     // primary key
-    var $pk = "id_kamar";
+    var $pk = "id_bed";
 	
 	public $variable;
 
@@ -19,7 +19,8 @@ class Kamar_model extends CI_Model {
     {
         
         $this->db->from($this->table);
-        $this->db->join("m_paviliun",'m_kamar.id_paviliun=m_paviliun.id_paviliun');
+        $this->db->join("m_kamar",'m_bed.id_kamar=m_kamar.id_kamar');
+        $this->db->join("m_paviliun",'m_paviliun.id_paviliun=m_kamar.id_paviliun');
         $i = 0;
         foreach ($this->column_search as $item) // loop column 
         {
@@ -78,6 +79,8 @@ class Kamar_model extends CI_Model {
     public function get_by_id($id)
     {
         $this->db->from($this->table);
+         $this->db->join("m_kamar",'m_bed.id_kamar=m_kamar.id_kamar');
+        $this->db->join("m_paviliun",'m_paviliun.id_paviliun=m_kamar.id_paviliun');
         $this->db->where($this->pk,$id);
         $query = $this->db->get();
  
@@ -101,12 +104,6 @@ class Kamar_model extends CI_Model {
         $this->db->where($this->pk, $id);
         $this->db->delete($this->table);
     }
-
-    public function getKamar($id) {
-        $this->db->where("id_paviliun",$id);
-        return $this->db->get($this->table);
-    }
-
 
 }
 

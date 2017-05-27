@@ -3,6 +3,8 @@
   <title>Display Kamar</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <!-- CSS Element -->
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/AdminLTE-2.3.11/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -26,6 +28,11 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/AdminLTE-2.3.11/dist/css/skins/_all-skins.min.css">
+  
+
+
+
+  <!-- Jquery Element -->
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -39,6 +46,8 @@
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/bootstrap/js/bootstrap.min.js"></script>
   <!-- Select2 -->
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/plugins/select2/select2.full.min.js"></script>
+  <!-- bootbox -->
+  <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/plugins/bootbox/bootbox.min.js"></script>
   <!-- DataTables -->
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -65,4 +74,4 @@
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="<?php echo base_url() ?>assets/AdminLTE-2.3.11/dist/js/demo.js"></script>
-  <!-- Page script -->
+

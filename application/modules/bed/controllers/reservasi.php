@@ -1,0 +1,148 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Reservasi extends CI_Controller {
+	public $query_menu;
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('admin_model',"admin");
+		$this->load->model('reservasi_model',"reservasi");
+		$this->query_menu = $this->admin->getMenu();
+	}
+
+	public function index()
+	{
+		
+	}
+
+	public function cekin($param1="") {
+		if ($param1=="tambah") {
+			$data = array(
+                'nama' 				=> $this->input->post('nama', TRUE),
+                'no_mr'    			=> $this->input->post('no_mr', TRUE),
+                'jenis_kelamin' 	=> $this->input->post('jk', TRUE),
+                'tgl_cekin'    		=> $this->input->post('tgl_cekin', TRUE),
+                'tgl_cekout'    	=> $this->input->post('tgl_cekout', TRUE),
+                'id_bed'    		=> $this->input->post('id_bed', TRUE),
+                'status_reservasi'  => "0",
+            );
+        
+        	$insert = $this->reservasi->save($data);
+        	$this->setBedStatus($this->input->post('id_bed', TRUE),"1");
+        	echo json_encode(array("status" => TRUE));
+		} else if ($param1=="ubah") {
+			$data = array(
+                'nama' 			=> $this->input->post('nama', TRUE),
+                'no_mr'    		=> $this->input->post('no_mr', TRUE),
+                'jenis_kelamin' => $this->input->post('jk', TRUE),
+                'tgl_cekin'    	=> $this->input->post('tgl_cekin', TRUE),
+                'tgl_cekout'    => $this->input->post('tgl_cekout', TRUE),
+                'id_bed'    	=> $this->input->post('id_bed', TRUE),
+            );
+
+	        $this->reservasi->update(array("id_reservasi" => $this->input->post("id_pk")), $data);
+	        echo json_encode(array("status" => TRUE));
+			
+		} else if ($param1=="edit") {
+			$id = $this->input->post("id");
+			$data = $this->reservasi->get_by_id($id);
+        	echo json_encode($data);
+		} else if ($param1=="hapus") {
+			$id = $this->input->post("id");
+			$data_bed = $this->reservasi->get_by_id($id);
+			$this->setBedStatus($data_bed->id_bed,"0");
+			$this->reservasi->delete_by_id($id);
+       		echo json_encode(array("status" => TRUE));
+		} else if ($param1=="out") {
+			$id = $this->input->post('id_reservasi',TRUE);
+			$tgl_cekout = $this->input->post('tgl_cekout',TRUE);
+			$data = array(
+				'tgl_cekout' 		=> $tgl_cekout,
+				'status_reservasi'	=> "1"
+				);
+			$data_bed = $this->reservasi->get_by_id($id);
+
+			$this->setBedStatus($data_bed->id_bed,"0");
+			$this->reservasi->update(array('id_reservasi'=>$id),$data);
+       		echo json_encode(array("status" => TRUE,"id"=>$id));
+		} else if ($param1=="list") {
+			$list = $this->reservasi->get_datatables();
+	        $data = array();
+	        $no = $_POST['start'];
+	        foreach ($list as $r) {
+	        	if ($r->status_reservasi==1) {
+	        		$r->status_reservasi = "<p class='text-green'>selesai</p>";
+	        	} else {
+	        		$r->status_reservasi = "<p class='text-yellow'>progress</p>";
+	        	}
+	            $no++;
+	            $row = array();
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_reservasi."'>";
+	            $row[] = $no;
+	            $row[] = $r->id_reservasi;
+	            $row[] = $r->nama;
+	            $row[] = $r->no_mr;
+	            $row[] = $r->jenis_kelamin;
+	            $row[] = $r->tgl_cekin;
+	            $row[] = $r->tgl_cekout;
+	            $row[] = $r->status_reservasi;
+	            $row[] = $r->nama_paviliun."/".$r->nama_kamar."/".$r->id_bed;
+	            //add html for action
+	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_reservasi."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_reservasi."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+	                  <a class="btn btn-xs btn-default" data-rel="tooltip" title="Cekout" onclick="cekout('."'".$r->id_reservasi."'".')"><i class="ace-icon fa  fa-plane bigger-120"></i></a>
+	                  ';
+	 
+	            $data[] = $row;
+	        }
+	 
+	        $output = array(
+	                        "sEcho" => $_POST['draw'],
+	                        "iTotalRecords" => $this->reservasi->count_all(),
+	                        "iTotalDisplayRecords" => $this->reservasi->count_filtered(),
+	                        "aaData" => $data,
+	                );
+	        //output to json format
+	        echo json_encode($output);			
+		} else {
+		  	$data = array(
+				'main_menu' => $this->query_menu,
+				'p'			=> 'reservasi/cekin_view',
+				'link1'		=> 'Admin',
+				'link2'		=> 'kamar',
+				'bed'		=> $this->loadBed(),
+				'reservasi'	=> $this->loadReservasi(),
+				'data_reservasi' => $this->loadDataReservasi()
+			);
+			$this->load->view("admin_view",$data);
+		}
+	}
+
+	public function cekout($param1="") {
+		
+	}
+
+	public function setBedStatus($param1="",$param2="") {
+		$this->reservasi->setBedStatus($param1,$param2);
+	}
+
+	public function loadDataReservasi () {
+		$data = $this->reservasi->loadDataReservasi();
+		return $data->result();
+	}
+	public function loadBed() {
+		$data = $this->reservasi->getBed();
+		return $data;
+	}
+
+	public function loadReservasi() {
+		$data = $this->reservasi->getReservasi();
+		return $data;
+	}
+
+
+
+}
+
+/* End of file reservasi.php */
+/* Location: ./application/controllers/reservasi.php */

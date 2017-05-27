@@ -35,20 +35,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4">
-            <div class="form-group">
-                <label>Minimal</label>
-                <select class="form-control select2" style="width: 100%;">
-                  <option selected="selected">Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-              </div>
-        </div>
         <div class="col-lg-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-body">
@@ -96,18 +82,30 @@
                       <form role="form">
                         <div class="form-group">
                           <label class="control-label" >Paviliun</label>
-                         <?php echo $paviliun ?>
-                          <span class="help-block">Help block with error</span>
-                        </div>
-                        <div class="form-group has-error">
-                          <label class="control-label" >Nama Paviliun</label>
                           <input type="hidden" class="form-control input-sm" id="id_pk" name="id_pk" placeholder="Enter ..." >
-                          <input type="text" class="form-control input-sm" id="nama_paviliun" name="nama_paviliun" placeholder="Enter ...">
+                          <select class="form-control select2" style="width: 100%;" name="id_paviliun" id="id_paviliun">
+                          <?php
+                              foreach ($paviliun as $row) {
+                                echo "<option value=".$row->id_paviliun.">".strtoupper($row->nama_paviliun)."</option>";
+                              }
+                          ?>
+                          </select>
                           <span class="help-block">Help block with error</span>
                         </div>
                         <div class="form-group has-error">
-                          <label class="control-label" >Keterangan</label>
-                          <input type="text" class="form-control input-sm" id="keterangan" name="keterangan" placeholder="Enter ...">
+                          <label class="control-label" >Nama Kamar</label>
+                          <input type="text" class="form-control input-sm" id="nama_kamar" name="nama_kamar" placeholder="Enter ...">
+                          <span class="help-block">Help block with error</span>
+                        </div>
+                        <div class="form-group has-error">
+                          <label class="control-label" >Kelas</label>
+                          <select class="form-control" name="kelas" style="width: 100%;">
+                            <option selected="selected" value='kelas I'>Kelas I</option>
+                            <option value="kelas II">Kelas II</option>
+                            <option value="kelas III">Kelas III</option>
+                            <option value="VIP">VIP</option>
+                            <option value="VVIP">VVIP</option>
+                          </select>
                           <span class="help-block">Help block with error</span>
                         </div>
                       

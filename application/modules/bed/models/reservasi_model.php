@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Kamar_model extends CI_Model {
+class Reservasi_model extends CI_Model {
 
-	var $table = 'm_kamar';
-    var $column_order = array('id_kamar','nama_kamar','kelas','nama_paviliun',null); //set column field database for datatable orderable
-    var $column_search = array('id_kamar','nama_kamar','kelas','nama_paviliun'); //set column field database for datatable searchable just firstname , lastname , address are searchable
-    var $order = array('id_kamar' => 'asc'); // default order 
+	var $table = 'reservasi';
+    var $column_order = array('id_reservasi','nama','no_mr',null); //set column field database for datatable orderable
+    var $column_search = array('id_reservasi','nama','no_mr'); //set column field database for datatable searchable just firstname , lastname , address are searchable
+    var $order = array('id_reservasi' => 'desc'); // default order 
     // primary key
-    var $pk = "id_kamar";
+    var $pk = "id_reservasi";
 	
 	public $variable;
 
@@ -19,7 +19,9 @@ class Kamar_model extends CI_Model {
     {
         
         $this->db->from($this->table);
-        $this->db->join("m_paviliun",'m_kamar.id_paviliun=m_paviliun.id_paviliun');
+        $this->db->join("m_bed as a",'reservasi.id_bed=a.id_bed','left');
+        $this->db->join("m_kamar as b",'a.id_kamar=b.id_kamar','left');
+        $this->db->join("m_paviliun c",'b.id_paviliun=c.id_paviliun','left');
         $i = 0;
         foreach ($this->column_search as $item) // loop column 
         {
@@ -77,7 +79,10 @@ class Kamar_model extends CI_Model {
  
     public function get_by_id($id)
     {
-        $this->db->from($this->table);
+        $this->db->from("reservasi");
+        $this->db->join("m_bed as a",'reservasi.id_bed=a.id_bed','left');
+        $this->db->join("m_kamar as b",'a.id_kamar=b.id_kamar','left');
+        $this->db->join("m_paviliun c",'b.id_paviliun=c.id_paviliun','left');
         $this->db->where($this->pk,$id);
         $query = $this->db->get();
  
@@ -102,11 +107,45 @@ class Kamar_model extends CI_Model {
         $this->db->delete($this->table);
     }
 
-    public function getKamar($id) {
-        $this->db->where("id_paviliun",$id);
-        return $this->db->get($this->table);
+
+    public function getBed() {
+        $this->db->from("m_bed");
+        $this->db->join("m_kamar as b",'m_bed.id_kamar=b.id_kamar');
+        $this->db->join("m_paviliun c",'b.id_paviliun=c.id_paviliun');
+        $this->db->where('m_bed.status',"0");
+        return $this->db->get();
     }
 
+    public function getReservasi() {
+        $this->db->from("reservasi");
+        $this->db->join("m_bed as a",'reservasi.id_bed=a.id_bed','left');
+        $this->db->join("m_kamar as b",'a.id_kamar=b.id_kamar','left');
+        $this->db->join("m_paviliun c",'b.id_paviliun=c.id_paviliun','left');
+        $this->db->where("reservasi.status_reservasi","0");
+        return $this->db->get();
+    }
+
+    public function setBedStatus($param1,$param2) {
+        $data = array(
+            'status' => $param2
+            );
+        $where = array(
+            'id_bed' => $param1
+            );
+        $this->db->update('m_bed', $data, $where);
+        return $this->db->affected_rows();
+    }
+    public function loadDataReservasi() {
+        $sql = "
+        SELECT
+            sum(IF(status_reservasi = '0',1, 0)) AS cekin,
+            sum(IF(status_reservasi = '1',1, 0)) AS cekout,
+            count(id_reservasi) AS total
+        FROM
+            reservasi";
+        $query = $this->db->query($sql);
+        return $query;
+    }
 
 }
 
