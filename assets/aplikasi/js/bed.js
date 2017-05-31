@@ -57,7 +57,7 @@ $(document).ready(function(){
             success : function (data) {
                 $("#id_kamar").html("");
                 $.each(data,function(i,data){
-                    $("#id_kamar").append("<option value='"+data.id_kamar+"'>"+data.nama_kamar+"</option>");
+                    $("#id_kamar").append("<option value='"+data.id_kamar+"'>"+data.nama_kamar+"/"+data.kelas+"</option>");
                 });
             },
             error : function (e) {

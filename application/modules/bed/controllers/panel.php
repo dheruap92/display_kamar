@@ -13,7 +13,8 @@ class Panel extends CI_Controller {
 		$data = array(
 			"p" 		=> "admin/dasboard_view",
 			'paviliun' 	=> $this->loadPaviliun(),
-			'kelas'		=> $this->loadViewKelas()
+			'kelas'		=> $this->loadViewKelas(),
+			'reservasi' => $this->loadReservasi()
 			);
 		$this->load->view("display_view",$data);
 	}
@@ -28,5 +29,9 @@ class Panel extends CI_Controller {
 		return $data->result();
 	}
 
+	public function loadReservasi() {
+		$data = $this->panel->getViewReservasi();
+		return $data->result();
+	}
 }
 

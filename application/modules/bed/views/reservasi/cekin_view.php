@@ -152,7 +152,7 @@
                           <select class="form-control select2" name="id_bed" style="width: 100%;">
                             <?php
                               foreach($bed->result() as $row) {
-                                echo "<option value='".$row->id_bed."'>".$row->nama_paviliun."/".$row->nama_kamar."/".$row->no_bed."</option>";
+                                echo "<option value='".$row->id_bed."'>".$row->nama_paviliun."/".$row->nama_kamar."--".$row->kelas."/".$row->no_bed."</option>";
                               } 
                              ?>
                           </select>

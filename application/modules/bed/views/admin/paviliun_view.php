@@ -39,7 +39,7 @@
                           <thead>
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
-                                  <th>ID</th>
+                                  <th>No</th>
                                   <th>Nama Paviliun</th>
                                   <th>Keterangan</th>
                                   <th>aksi</th>
@@ -48,7 +48,7 @@
                           <tfoot>
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
-                                  <th>ID</th>
+                                  <th>No</th>
                                   <th>Nama Paviliun</th>
                                   <th>Keterangan</th>
                                   <th>aksi</th>

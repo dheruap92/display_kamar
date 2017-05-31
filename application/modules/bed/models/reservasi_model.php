@@ -125,6 +125,23 @@ class Reservasi_model extends CI_Model {
         return $this->db->get();
     }
 
+    public function getDataKamar($id) {
+        $this->db->select("*");
+        $this->db->from("m_kamar");
+        $this->db->join("m_paviliun",'m_kamar.id_paviliun=m_paviliun.id_paviliun');
+        $this->db->where("m_kamar.id_paviliun",$id);
+        return $this->db->get();
+    }
+
+    public function getDataBed($id) {
+        $this->db->select("*");
+        $this->db->from("m_bed");
+        $this->db->join("m_kamar",'m_bed.id_kamar=m_kamar.id_kamar');
+        $this->db->join("m_paviliun",'m_paviliun.id_paviliun=m_kamar.id_paviliun');
+        $this->db->where("m_bed.id_kamar",$id);
+        return $this->db->get();
+    }
+
     public function setBedStatus($param1,$param2) {
         $data = array(
             'status' => $param2

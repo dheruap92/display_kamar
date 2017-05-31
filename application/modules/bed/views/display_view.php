@@ -23,6 +23,10 @@
   <![endif]-->
 
   <style>
+    body {
+      background-color: #B1B5BE;
+      padding: 10px;
+    }
     td {
       font-size: 35px;
       font-weight : bold;
@@ -113,35 +117,25 @@
             <div class="box-body">
               <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
+                    <h1>Update Reservasi</h1>
                   <div class="item active">
-                    <h1>Basic Information</h1>
-                   <!--  <table class="table table-hover">
+                    <table class="table table-hover">
                         <tr>
-                          <th>Kelas</th>
-                          <th>Total Bed</th>
-                          <th>Terisi</th>
+                          <th>Nama </th>
+                          <th>Tanggal</th>
+                          <th>Ruangan</th>
                         </tr>
+                        <?php
+                          foreach($reservasi as $key=>$value) {
+                        ?>    
                         <tr>
-                          <td>I</td>
-                          <td>2</td>
-                          <td>3</td>
+                          <td><?php echo substr($value->nama,0,5) ?></td>
+                          <td><?php echo date("Y-m-d",strtotime($value->tgl_cekin)) ?></td>
+                          <td><?php echo strtoupper($value->nama_paviliun) ?></td>
                         </tr>
-                        <tr>
-                          <td>II</td>
-                          <td>3</td>
-                          <td>4</td>
-                        </tr>
-                        <tr>
-                          <td>Utama</td>
-                          <td>4</td>
-                          <td>4</td>
-                        </tr>
-                        <tr>
-                          <td>VIP</td>
-                          <td>5</td>
-                          <td>1</td>
-                        </tr>
-                      </table> -->
+                        <?php   } 
+                        ?>
+                    </table>
                   </div>
                 </div>
                 <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">

@@ -11,7 +11,7 @@ class Auth extends CI_Controller {
 	public function index()
 	{
 		if ($this->ion_auth->logged_in()) {
-			redirect("bed/admin");
+			redirect("admin");
 		}
 		$this->load->view("login");
 	}
@@ -31,7 +31,7 @@ class Auth extends CI_Controller {
 			$this->session->set_userdata($sess_data);
 			$this->session->set_flashdata('message',$this->ion_auth->messages());
 			
-			redirect('bed/admin');
+			redirect('admin');
 
 		} else {
 			$this->session->set_flashdata('message',"username dan password tidak dikenal");

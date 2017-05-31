@@ -60,25 +60,38 @@ function add() {
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('cekout'); // Set Title to Bootstrap modal title
+}
+
+function out() {
+    save_method = 'out';
+    $('#form')[0].reset(); // reset form on modals
+    $('.form-group').removeClass('has-error'); // clear error class
+    $('.help-block').empty(); // clear error string
+    $('#modal_form_out').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Cekout'); // Set Title to Bootstrap modal title
 }
 
 function save() {
     $('#btnSave').text('saving...'); //change button text
     $('#btnSave').attr('disabled',true); //set button disable
 
-    var url,alert_text;
+    var url,alert_text,formData;
     if (save_method=='add') {
         url = base_url+"bed/reservasi/cekout/tambah";
         alert_text = "Data Berhasil Ditambahkan";
+        formData = $("#form").serialize();
+    } else if(save_method=='out') {
+        url = base_url+"bed/reservasi/cekout/out";
+        alert_text = "Proses Cekout Berhasil";
+        formData = $("#form2").serialize();
     } else {
         url = base_url+"bed/reservasi/cekout/ubah";
         alert_text = "Data Berhasi Di Update";
+        formData = $("#form").serialize();
     }
 
-
     // ajax add data
-    var formData = $("#form").serialize();
     $.ajax({
         url : url,
         type: "POST",
@@ -89,6 +102,7 @@ function save() {
             if(data.status) //if success close modal and reload ajax table
             {
                 $('#modal_form').modal('hide');
+                $('#modal_form_out').modal('hide');
                 bootbox.alert(alert_text);
                 reload_table();
             } else {
@@ -157,10 +171,12 @@ function update(id)
         dataType: "JSON",
         success: function(data)
         {
-            $('[name="id_pk"]').val(data.id_kamar);
-            $('[name="nama_kamar"]').val(data.nama_kamar);
-            $('[name="id_paviliun"]').val(data.id_paviliun);
-            $('[name="kelas"]').val(data.kelas);
+            $('[name="id_pk"]').val(data.id_reservasi);
+            $('[name="tgl_cekout"]').val(data.tgl_cekout);
+            $('[name="nama"]').val(data.nama);
+            $('[name="no_mr"]').val(data.no_mr);
+            $('[name="id_bed"]').val(data.id_bed);
+            $('[name="jk"]').val(data.jenis_kelamin);
             $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Edit faq'); // Set title to Bootstrap modal title
  
@@ -204,5 +220,33 @@ function bulk_delete() {
         }
     });
     }
+}
+
+function cekout(id) {
+    bootbox.prompt({
+        title: "Masukkan Tanggal Cekout",
+        inputType: 'date',
+        callback: function (result) {
+            console.log(result);
+            $.ajax({
+                url : base_url+"bed/reservasi/cekout/out",
+                type: "POST",
+                data: {"id_reservasi":id,"tgl_cekout":result},
+                dataType: "JSON",
+                success: function(data)
+                { 
+                    bootbox.alert('Cekout telah berhasil di proses');
+                    reload_table();
+                },
+                error: function (e)
+                {
+                    bootbox.alert('Error adding / update data');
+                    console.log(e.responseText);
+                    $('#btnSave').text('save'); //change button text
+                    $('#btnSave').attr('disabled',false); //set button enable 
+                }
+            });
+        }
+    });
 }
 

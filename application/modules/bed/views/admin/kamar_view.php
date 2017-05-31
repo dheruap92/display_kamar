@@ -42,7 +42,7 @@
                           <thead>
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
-                                  <th>ID</th>
+                                  <th>No</th>
                                   <th>Nama Kamar</th>
                                   <th>Kelas</th>
                                   <th>Paviliun</th>
@@ -52,7 +52,7 @@
                           <tfoot>
                               <tr>
                                   <th><input type="checkbox" id="check-all"></th>
-                                  <th>ID</th>
+                                  <th>No</th>
                                   <th>Nama Kamar</th>
                                   <th>Kelas</th>
                                   <th>Paviliun</th>

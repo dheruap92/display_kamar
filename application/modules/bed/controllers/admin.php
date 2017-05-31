@@ -61,12 +61,12 @@ class Admin extends CI_Controller {
 		} else if ($param1=="list") {
 			$list = $this->paviliun->get_datatables();
 	        $data = array();
-	        // $no = $_POST['start'];
+	        $no = $_POST['start'];
 	        foreach ($list as $r) {
-	            // $no++;
+	            $no++;
 	            $row = array();
 	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_paviliun."'>";
-	            $row[] = $r->id_paviliun;
+	            $row[] = $no;
 	            $row[] = $r->nama_paviliun;
 	            $row[] = $r->keterangan;
 	            //add html for action
@@ -127,12 +127,12 @@ class Admin extends CI_Controller {
 		} else if ($param1=="list") {
 			$list = $this->kamar->get_datatables();
 	        $data = array();
-	        // $no = $_POST['start'];
+	        $no = $_POST['start'];
 	        foreach ($list as $r) {
-	            // $no++;
+	            $no++;
 	            $row = array();
 	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_kamar."'>";
-	            $row[] = $r->id_kamar;
+	            $row[] = $no;
 	            $row[] = $r->nama_kamar;
 	            $row[] = $r->kelas;
 	            $row[] = $r->nama_paviliun;
@@ -194,9 +194,9 @@ class Admin extends CI_Controller {
 		} else if ($param1=="list") {
 			$list = $this->bed->get_datatables();
 	        $data = array();
-	        // $no = $_POST['start'];
+	        $no = $_POST['start'];
 	        foreach ($list as $r) {
-	            // $no++;
+	            $no++;
 	            if ($r->status==0) {
 	            	$r->status = "Kosong";
 	            } else {
@@ -204,7 +204,7 @@ class Admin extends CI_Controller {
 	            }
 	            $row = array();
 	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_bed."'>";
-	            $row[] = $r->id_bed;
+	            $row[] = $no;
 	            $row[] = $r->nama_paviliun;
 	            $row[] = $r->nama_kamar;
 	            $row[] = $r->kelas;
