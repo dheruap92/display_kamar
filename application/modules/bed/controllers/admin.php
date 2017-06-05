@@ -236,6 +236,79 @@ class Admin extends CI_Controller {
 			$this->load->view("admin_view",$data);
 		}
 	}
+
+	#Pengumuman
+	public function pengumuman($param1="") {
+		if ($param1=="tambah") {
+			$data = array(
+              'id_kamar'    => $this->input->post('id_kamar', TRUE),
+              'no_bed'      => $this->input->post('no_bed', TRUE)
+            );
+        
+        	$insert = $this->bed->save($data);
+        	echo json_encode(array("status" => TRUE));
+		} else if ($param1=="ubah") {
+			$data = array(
+               'id_kamar'    => $this->input->post('id_kamar', TRUE),
+               'no_bed'      => $this->input->post('no_bed', TRUE)
+            );
+
+	        $this->bed->update(array("id_bed" => $this->input->post("id_pk")), $data);
+	        echo json_encode(array("status" => TRUE));
+			
+		} else if ($param1=="edit") {
+			$id = $this->input->post("id");
+			$data = $this->bed->get_by_id($id);
+        	echo json_encode($data);
+		} else if ($param1=="hapus") {
+			$id = $this->input->post("id");
+			$this->bed->delete_by_id($id);
+       		echo json_encode(array("status" => TRUE));
+		} else if ($param1=="list") {
+			$list = $this->bed->get_datatables();
+	        $data = array();
+	        $no = $_POST['start'];
+	        foreach ($list as $r) {
+	            $no++;
+	            if ($r->status==0) {
+	            	$r->status = "Kosong";
+	            } else {
+	            	$r->status = "Terisi";
+	            }
+	            $row = array();
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_bed."'>";
+	            $row[] = $no;
+	            $row[] = $r->nama_paviliun;
+	            $row[] = $r->nama_kamar;
+	            $row[] = $r->kelas;
+	            $row[] = $r->no_bed;
+	            $row[] = $r->status;
+	            //add html for action
+	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_bed."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_bed."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
+	 
+	            $data[] = $row;
+	        }
+	 
+	        $output = array(
+	                        "sEcho" => $_POST['draw'],
+	                        "iTotalRecords" => $this->kamar->count_all(),
+	                        "iTotalDisplayRecords" => $this->kamar->count_filtered(),
+	                        "aaData" => $data,
+	                );
+	        //output to json format
+	        echo json_encode($output);			
+		} else {
+		  	$data = array(
+				'main_menu' => $this->query_menu,
+				'p'			=> 'admin/bed_view',
+				'link1'		=> 'Admin',
+				'link2'		=> 'Bed',
+				'paviliun'	=> $this->loadPaviliun(),
+			);
+			$this->load->view("admin_view",$data);
+		}
+	}
 	
 	function loadPaviliun() {
 		$data_paviliun = $this->paviliun->getPaviliun();

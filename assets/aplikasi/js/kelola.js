@@ -60,11 +60,20 @@ $(document).ready(function(){
 function reload_table() {
     table.ajax.reload(null,false);
 } 
+function reload_kamar() {
+
+}
+
+function reload_bed() {
+    
+}
 
 function lihat(id) {
     $("#kamar_table").show();
     $("#bed_table").hide();
     $("#kamar_t_b").html("");
+    $(".id_paviliun").val(id);
+    $(".id_paviliun").attr('disabled',true);
     $.ajax({
         url : base_url+"bed/reservasi/kelola/list_kamar",
         type: "POST",
@@ -95,6 +104,8 @@ function lihat(id) {
 function lihat_kamar(id) {
     $("#bed_t_b").html("");
     $("#bed_table").show();
+    $("#id_kamar").val(id);
+    $("#id_kamar").attr('disabled',true);
     $.ajax({
         url : base_url+"bed/reservasi/kelola/list_bed",
         type: "POST",
@@ -121,6 +132,69 @@ function lihat_kamar(id) {
  
         }
     });
+}
+
+function add_kamar() {
+    save_method = 'add';
+    $('.form-group').removeClass('has-error'); // clear error class
+    $('.help-block').empty(); // clear error string
+    $('#modal_form').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add'); // Set Title to Bootstrap modal title
+}
+function add_bed() {
+    save_method = 'add';
+    $('.form-group').removeClass('has-error'); // clear error class
+    $('.help-block').empty(); // clear error string
+    $('#modal_form_bed').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add'); // Set Title to Bootstrap modal title
+}
+function save_kamar() {
+    $('#btnSave').text('saving...'); //change button text
+    $('#btnSave').attr('disabled',true); //set button disable
+    // $('#modal_form').modal('hide'); // show bootstrap modal
+    $(".id_paviliun").attr('disabled',false);
+     // ajax add data
+    var formData = $("#form").serialize();
+    console.log(formData);
+    $.ajax({
+        url : base_url+"bed/admin/kamar/tambah",
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+        success: function(data)
+        { 
+            if(data.status) //if success close modal and reload ajax table
+            {
+                $('#modal_form').modal('hide');
+                bootbox.alert("Data Berhasil Ditambahkan");
+                reload_table();
+            } else {
+                for (i=0;i<data.inputerror.length;i++) {
+                    $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error');
+                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                } 
+            }
+ 
+            $('#btnSave').text('save'); //change button text
+            $('#btnSave').attr('disabled',false); //set button enable 
+ 
+ 
+        },
+        error: function (e)
+        {
+            bootbox.alert('Error adding / update data');
+            console.log(e.responseText);
+            $('#btnSave').text('save'); //change button text
+            $('#btnSave').attr('disabled',false); //set button enable 
+ 
+        }
+    });
+}
+
+function save_bed() {
+    $('#btnSave_bed').text('saving...'); //change button text
+    $('#btnSave_bed').attr('disabled',true); //set button disable
+    // $('#modal_form_bed').modal('hide'); // show bootstrap modal
 }
 
 

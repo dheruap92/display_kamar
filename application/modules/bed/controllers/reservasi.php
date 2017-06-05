@@ -261,7 +261,9 @@ class Reservasi extends CI_Controller {
 				'main_menu' => $this->query_menu,
 				'p'			=> 'reservasi/kelola_view',
 				'link1'		=> 'Admin',
-				'link2'		=> 'kamar'
+				'link2'		=> 'kamar',
+				'paviliun'	=> $this->loadPaviliun(),
+				'kamar'		=> $this->loadKamar(),
 			);
 			$this->load->view('admin_view',$data);
 
@@ -284,6 +286,16 @@ class Reservasi extends CI_Controller {
 	public function loadReservasi() {
 		$data = $this->reservasi->getReservasi();
 		return $data;
+	}
+
+	function loadPaviliun() {
+		$data_paviliun = $this->paviliun->getPaviliun();
+		return $data_paviliun->result();
+	}
+
+	function loadKamar($id="") {
+		$data_kamar = $this->kamar->getKamar($id)->result();
+		return $data_kamar;
 	}
 
 
