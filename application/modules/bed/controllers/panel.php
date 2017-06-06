@@ -11,10 +11,11 @@ class Panel extends CI_Controller {
 	
 	public function index(){
 		$data = array(
-			"p" 		=> "admin/dasboard_view",
-			'paviliun' 	=> $this->loadPaviliun(),
-			'kelas'		=> $this->loadViewKelas(),
-			'reservasi' => $this->loadReservasi()
+			"p" 		 => "admin/dasboard_view",
+			'paviliun' 	 => $this->loadPaviliun(),
+			'kelas'		 => $this->loadViewKelas(),
+			'reservasi'  => $this->loadReservasi(),
+			'pengumuman' => $this->loadPengumuman()
 			);
 		$this->load->view("display_view",$data);
 	}
@@ -31,6 +32,11 @@ class Panel extends CI_Controller {
 
 	public function loadReservasi() {
 		$data = $this->panel->getViewReservasi();
+		return $data->result();
+	}
+
+	public function loadPengumuman() {
+		$data = $this->panel->getViewPengumuman();
 		return $data->result();
 	}
 }

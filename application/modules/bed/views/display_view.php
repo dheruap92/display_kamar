@@ -43,6 +43,10 @@
       font-weight : bold;
       text-align: center;
     }
+    .text-pengumuman {
+      font-size: 22px;
+      font-weight: bold;
+    }
   </style>
 
 </head>
@@ -53,105 +57,96 @@
         <center><h1>Display Kamar RSUD Pariaman</h1></center>
     </div>
   </div>
-  <div>
-     <div class="row">
-          <!-- /.col -->
-        <div class="col-xs-6">
-          <div class="box box-solid">
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                  <?php
-                  $no=0;
-                  $active = ""; 
-                    foreach ($paviliun as $row) { 
-                    $no++;
-                    if($no==1) {
-                      $active = "active";
-                    } else {
-                      $active = "";
+  <div class="row" >
+      <!-- /.col -->
+    <div class="col-xs-6" >
+      <div class="box box-solid" style="max-height: 80%;height:600px">
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <?php
+              $no=0;
+              $active = ""; 
+                foreach ($paviliun as $row) { 
+                $no++;
+                if($no==1) {
+                  $active = "active";
+                } else {
+                  $active = "";
+                }
+              ?>
+                <div class="item <?php echo $active ?>">
+                <h1><?php echo strtoupper($row->nama_paviliun) ?></h1>
+                  <table class="table table-hover">
+                   <tr>
+                      <th>Kelas</th>
+                      <th>Total Bed</th>
+                      <th>Terisi</th>
+                    </tr>
+                  <?php 
+                    foreach ($kelas as $row_kelas) {
+                       if ($row->nama_paviliun==$row_kelas->nama_paviliun) {
+                  ?>
+                    <tr>
+                      <td><?php echo $row_kelas->kelas ?></td>
+                      <td><?php echo $row_kelas->total ?></td>
+                      <td><?php echo $row_kelas->terisi?></td>
+                    </tr>
+                  <?php      
+                       }
                     }
                   ?>
-                    <div class="item <?php echo $active ?>">
-                    <h1><?php echo strtoupper($row->nama_paviliun) ?></h1>
-                      <table class="table table-hover">
-                       <tr>
-                          <th>Kelas</th>
-                          <th>Total Bed</th>
-                          <th>Terisi</th>
-                        </tr>
-                      <?php 
-                        foreach ($kelas as $row_kelas) {
-                           if ($row->nama_paviliun==$row_kelas->nama_paviliun) {
-                      ?>
-                        <tr>
-                          <td><?php echo $row_kelas->kelas ?></td>
-                          <td><?php echo $row_kelas->total ?></td>
-                          <td><?php echo $row_kelas->terisi?></td>
-                        </tr>
-                      <?php      
-                           }
-                        }
-                      ?>
-                        
-                      </table>
-                  </div>
-                  <?php } ?>
-                </div>
-                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                  <span class="fa fa-angle-left"></span>
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                  <span class="fa fa-angle-right"></span>
-                </a>
+                    
+                  </table>
               </div>
+              <?php } ?>
             </div>
-            <!-- /.box-body -->
+            </a>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
-        <div class="col-xs-6">
-          <div class="box box-solid">
-            <div class="box-body">
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <h1>Update Reservasi</h1>
-                  <div class="item active">
-                    <table class="table table-hover">
-                        <tr>
-                          <th>Nama </th>
-                          <th>Tanggal</th>
-                          <th>Ruangan</th>
-                        </tr>
-                        <?php
-                          foreach($reservasi as $key=>$value) {
-                        ?>    
-                        <tr>
-                          <td><?php echo substr($value->nama,0,5) ?></td>
-                          <td><?php echo date("Y-m-d",strtotime($value->tgl_cekin)) ?></td>
-                          <td><?php echo strtoupper($value->nama_paviliun) ?></td>
-                        </tr>
-                        <?php   } 
-                        ?>
-                    </table>
-                  </div>
-                </div>
-                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                  <span class="fa fa-angle-left"></span>
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                  <span class="fa fa-angle-right"></span>
-                </a>
-              </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
+        <!-- /.box-body -->
       </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-xs-6">
+      <div class="box box-solid" style="max-height: 80%;height:600px">
+        <div class="box-body">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <?php
+                $no = 1;
+                foreach ($pengumuman as $row) {
+                if ($no==1) {
+                  $active = "active";
+                } else {
+                  $active = "";
+                }
+                $no++; 
+              ?>
+              <div class="item <?php echo $active ?>">
+                <h1 class="text-center"><?php echo $row->judul ?></h1>
+                <p class="text-pengumuman"><?php echo $row->text_pengumuman ?></p>
+              </div>
+              
+              <?php
+                } 
+              ?>
+              <div class="item">
+                <h3 class="text-center">Mengapa kita menggunakannya?</h3>
+                <p class="text-pengumuman">
+                  Sudah merupakan fakta bahwa seorang pembaca akan terpengaruh oleh isi tulisan dari sebuah halaman saat ia melihat tata letaknya. Maksud penggunaan Lorem Ipsum adalah karena ia kurang lebih memiliki penyebaran huruf yang normal, ketimbang menggunakan kalimat seperti "Bagian isi disini, bagian isi disini", sehingga ia seolah menjadi naskah Inggris yang bisa dibaca. Banyak paket Desktop Publishing dan editor situs web yang kini menggunakan Lorem Ipsum sebagai contoh teks. Karenanya pencarian terhadap kalimat "Lorem Ipsum" akan berujung pada banyak situs web yang masih dalam tahap pengembangan. Berbagai versi juga telah berubah dari tahun ke tahun, kadang karena tidak sengaja, kadang karena disengaja (misalnya karena dimasukkan unsur humor atau semacamnya)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
   </div>
 <!-- /.center -->
 

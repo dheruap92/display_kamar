@@ -34,6 +34,11 @@ class Panel_model extends CI_Model {
         return $this->db->get();
     }
 
+    public function getViewPengumuman() {
+    	$this->db->from("m_pengumuman");
+    	return $this->db->get();
+    }
+
 
 }
 

@@ -19,8 +19,6 @@ class Pengumuman_model extends CI_Model {
     {
         
         $this->db->from($this->table);
-        $this->db->join("m_kamar",'m_pengumuman.id_kamar=m_kamar.id_kamar');
-        $this->db->join("m_paviliun",'m_paviliun.id_paviliun=m_kamar.id_paviliun');
         $i = 0;
         foreach ($this->column_search as $item) // loop column 
         {
@@ -79,8 +77,6 @@ class Pengumuman_model extends CI_Model {
     public function get_by_id($id)
     {
         $this->db->from($this->table);
-         $this->db->join("m_kamar",'m_pengumuman.id_kamar=m_kamar.id_kamar');
-        $this->db->join("m_paviliun",'m_paviliun.id_paviliun=m_kamar.id_paviliun');
         $this->db->where($this->pk,$id);
         $query = $this->db->get();
  

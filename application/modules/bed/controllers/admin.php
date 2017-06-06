@@ -11,6 +11,7 @@ class Admin extends CI_Controller {
 		$this->load->model("paviliun_model",'paviliun');
 		$this->load->model("kamar_model",'kamar');
 		$this->load->model('bed_model',"bed");
+		$this->load->model('pengumuman_model',"pengumuman");
 		$this->load->model('admin_model',"admin");
 		$this->query_menu = $this->admin->getMenu();
 		if (!$this->ion_auth->logged_in()) {
@@ -241,59 +242,54 @@ class Admin extends CI_Controller {
 	public function pengumuman($param1="") {
 		if ($param1=="tambah") {
 			$data = array(
-              'id_kamar'    => $this->input->post('id_kamar', TRUE),
-              'no_bed'      => $this->input->post('no_bed', TRUE)
+              'judul'    		=> $this->input->post('judul', TRUE),
+              'text_pengumuman' => $this->input->post('text_pengumuman', TRUE),
+              'keterangan' 		=> $this->input->post('keterangan', TRUE)
             );
         
-        	$insert = $this->bed->save($data);
+        	$insert = $this->pengumuman->save($data);
         	echo json_encode(array("status" => TRUE));
 		} else if ($param1=="ubah") {
 			$data = array(
-               'id_kamar'    => $this->input->post('id_kamar', TRUE),
-               'no_bed'      => $this->input->post('no_bed', TRUE)
+               'judul'    		=> $this->input->post('judul', TRUE),
+              'text_pengumuman' => $this->input->post('text_pengumuman', TRUE),
+              'keterangan' 		=> $this->input->post('keterangan', TRUE)
             );
 
-	        $this->bed->update(array("id_bed" => $this->input->post("id_pk")), $data);
+	        $this->pengumuman->update(array("id_pengumuman" => $this->input->post("id_pk")), $data);
 	        echo json_encode(array("status" => TRUE));
 			
 		} else if ($param1=="edit") {
 			$id = $this->input->post("id");
-			$data = $this->bed->get_by_id($id);
+			$data = $this->pengumuman->get_by_id($id);
         	echo json_encode($data);
 		} else if ($param1=="hapus") {
 			$id = $this->input->post("id");
-			$this->bed->delete_by_id($id);
+			$this->pengumuman->delete_by_id($id);
        		echo json_encode(array("status" => TRUE));
 		} else if ($param1=="list") {
-			$list = $this->bed->get_datatables();
+			$list = $this->pengumuman->get_datatables();
 	        $data = array();
 	        $no = $_POST['start'];
 	        foreach ($list as $r) {
 	            $no++;
-	            if ($r->status==0) {
-	            	$r->status = "Kosong";
-	            } else {
-	            	$r->status = "Terisi";
-	            }
 	            $row = array();
-	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_bed."'>";
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_pengumuman."'>";
 	            $row[] = $no;
-	            $row[] = $r->nama_paviliun;
-	            $row[] = $r->nama_kamar;
-	            $row[] = $r->kelas;
-	            $row[] = $r->no_bed;
-	            $row[] = $r->status;
+	            $row[] = $r->judul;
+	            $row[] = $r->text_pengumuman;
+	            $row[] = $r->keterangan;
 	            //add html for action
-	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_bed."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
-	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_bed."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
+	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_pengumuman."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_pengumuman."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
 	 
 	            $data[] = $row;
 	        }
 	 
 	        $output = array(
 	                        "sEcho" => $_POST['draw'],
-	                        "iTotalRecords" => $this->kamar->count_all(),
-	                        "iTotalDisplayRecords" => $this->kamar->count_filtered(),
+	                        "iTotalRecords" => $this->pengumuman->count_all(),
+	                        "iTotalDisplayRecords" => $this->pengumuman->count_filtered(),
 	                        "aaData" => $data,
 	                );
 	        //output to json format
@@ -301,10 +297,9 @@ class Admin extends CI_Controller {
 		} else {
 		  	$data = array(
 				'main_menu' => $this->query_menu,
-				'p'			=> 'admin/bed_view',
+				'p'			=> 'admin/pengumuman_view',
 				'link1'		=> 'Admin',
-				'link2'		=> 'Bed',
-				'paviliun'	=> $this->loadPaviliun(),
+				'link2'		=> 'Pengumuman'
 			);
 			$this->load->view("admin_view",$data);
 		}

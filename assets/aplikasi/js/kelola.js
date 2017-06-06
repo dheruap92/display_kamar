@@ -117,7 +117,13 @@ function lihat_kamar(id) {
             var no = 1;
             if(data.status==1) {
                 $.each(data.data,function(i,data){
-                   var body = "<tr><td></td><td>"+no+"</td><td>"+data.nama_paviliun+"</td><td>"+data.nama_kamar+"</td><td>"+data.kelas+"</td><td>"+data.no_bed+"</td><td>"+data.status+"</td><td><button class='btn btn-xs btn-default' data-rel='tooltip' title='Lihat' onclick='lihat_kamar(\""+data.id_kamar+"\")'><i class='ace-icon fa fa-eye bigger-120'></i></button></td></tr>";
+                   var body = "<tr><td></td><td>"+no+
+                   "</td><td>"+data.nama_paviliun+
+                   "</td><td>"+data.nama_kamar+
+                   "</td><td>"+data.kelas+
+                   "</td><td>"+data.no_bed+
+                   "</td><td>"+data.status+
+                   "</td><td><button class='btn btn-xs btn-default' data-rel='tooltip' title='Lihat' onclick='lihat_kamar(\""+data.id_kamar+"\")'><i class='ace-icon fa fa-eye bigger-120'></i></button></td></tr>";
                     $("#bed_t_b").append(body);
                     no++;  
                 });
@@ -151,11 +157,10 @@ function add_bed() {
 function save_kamar() {
     $('#btnSave').text('saving...'); //change button text
     $('#btnSave').attr('disabled',true); //set button disable
-    // $('#modal_form').modal('hide'); // show bootstrap modal
+    $('#modal_form').modal('hide'); // show bootstrap modal
     $(".id_paviliun").attr('disabled',false);
      // ajax add data
     var formData = $("#form").serialize();
-    console.log(formData);
     $.ajax({
         url : base_url+"bed/admin/kamar/tambah",
         type: "POST",
@@ -167,14 +172,14 @@ function save_kamar() {
             {
                 $('#modal_form').modal('hide');
                 bootbox.alert("Data Berhasil Ditambahkan");
-                reload_table();
+                lihat($("#id_paviliun").val());
             } else {
                 for (i=0;i<data.inputerror.length;i++) {
                     $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error');
                     $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
                 } 
             }
- 
+
             $('#btnSave').text('save'); //change button text
             $('#btnSave').attr('disabled',false); //set button enable 
  
@@ -195,6 +200,44 @@ function save_bed() {
     $('#btnSave_bed').text('saving...'); //change button text
     $('#btnSave_bed').attr('disabled',true); //set button disable
     // $('#modal_form_bed').modal('hide'); // show bootstrap modal
+    $(".id_paviliun").attr('disabled',false);
+    $("#id_kamar").attr('disabled',false);
+    // ajax add data
+    var formData = $("#form_bed").serialize();
+    $.ajax({
+        url : base_url+"bed/admin/bed/tambah",
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+        success: function(data)
+        { 
+            if(data.status) //if success close modal and reload ajax table
+            {
+                $('#modal_form').modal('hide');
+                bootbox.alert("Data Berhasil Ditambahkan");
+                lihat_kamar($("#id_kamar").val());
+            } else {
+                for (i=0;i<data.inputerror.length;i++) {
+                    $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error');
+                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                } 
+            }
+            console.log(formData);
+ 
+            $('#btnSave').text('save'); //change button text
+            $('#btnSave').attr('disabled',false); //set button enable 
+ 
+ 
+        },
+        error: function (e)
+        {
+            bootbox.alert('Error adding / update data');
+            console.log(e.responseText);
+            $('#btnSave').text('save'); //change button text
+            $('#btnSave').attr('disabled',false); //set button enable 
+ 
+        }
+    });
 }
 
 
