@@ -46,6 +46,7 @@ class Auth extends CI_Controller {
 		redirect('auth');
 	}
 
+
 }
 
 /* End of file auth.php */

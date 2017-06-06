@@ -12,7 +12,12 @@
 
 <!-- Main content -->
 <section class="content">
-    <!-- Small boxes (Stat box) -->
+    <?php if (!empty($this->session->flashdata("message"))) {?>   
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong><?php echo $this->session->flashdata("message"); ?></strong>
+    </div>
+    <?php } ?>
     <div class="row">
         <div class="col-lg-4 col-xs-6">
             <!-- small box -->

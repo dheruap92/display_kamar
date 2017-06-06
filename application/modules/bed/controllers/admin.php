@@ -12,14 +12,14 @@ class Admin extends CI_Controller {
 		$this->load->model("kamar_model",'kamar');
 		$this->load->model('bed_model',"bed");
 		$this->load->model('pengumuman_model',"pengumuman");
+		$this->load->model('menu_model',"menu");
+		$this->load->model('akun_model',"akun");
 		$this->load->model('admin_model',"admin");
 		$this->query_menu = $this->admin->getMenu();
 		if (!$this->ion_auth->logged_in()) {
 			redirect("auth",'refresh');
 		} else {
-			if (!$this->ion_auth->in_group('admin')) {
-				redirect("auth",'refresh');
-			}
+			
 		}
 	}
 	
@@ -34,6 +34,7 @@ class Admin extends CI_Controller {
 
 	#paviliun
 	public function paviliun($param1="") {
+		$this->validate_admin();
 		if ($param1=="tambah") {
 			$data = array(
                 'nama_paviliun' => $this->input->post('nama_paviliun', TRUE),
@@ -98,6 +99,7 @@ class Admin extends CI_Controller {
 
 	#kamar
 	public function Kamar($param1="") {
+		$this->validate_admin();
 		if ($param1=="tambah") {
 			$data = array(
               'nama_kamar'  => $this->input->post('nama_kamar', TRUE),
@@ -167,6 +169,7 @@ class Admin extends CI_Controller {
 
 	#bed
 	public function bed($param1="") {
+		$this->validate_admin();
 		if ($param1=="tambah") {
 			$data = array(
               'id_kamar'    => $this->input->post('id_kamar', TRUE),
@@ -240,6 +243,7 @@ class Admin extends CI_Controller {
 
 	#Pengumuman
 	public function pengumuman($param1="") {
+		// $this->validate_admin();
 		if ($param1=="tambah") {
 			$data = array(
               'judul'    		=> $this->input->post('judul', TRUE),
@@ -304,7 +308,171 @@ class Admin extends CI_Controller {
 			$this->load->view("admin_view",$data);
 		}
 	}
+
+	#menu
+	public function menu($param1="") {
+		$this->validate_admin();
+		if ($param1=="tambah") {
+			$data = array(
+              'name'    	=> $this->input->post('name', TRUE),
+              'url' 		=> $this->input->post('url', TRUE),
+              'judul' 		=> $this->input->post('judul', TRUE),
+              'parent_id'	=> $this->input->post('parent_id', TRUE)
+            );
+        
+        	$insert = $this->menu->save($data);
+        	echo json_encode(array("status" => TRUE));
+		} else if ($param1=="ubah") {
+			$data = array(
+              'name'    	=> $this->input->post('name', TRUE),
+              'url' 		=> $this->input->post('url', TRUE),
+              'judul' 		=> $this->input->post('judul', TRUE),
+              'parent_id'	=> $this->input->post('parent_id', TRUE)
+            );
+
+	        $this->menu->update(array("id_menu" => $this->input->post("id_pk")), $data);
+	        echo json_encode(array("status" => TRUE));
+			
+		} else if ($param1=="edit") {
+			$id = $this->input->post("id");
+			$data = $this->menu->get_by_id($id);
+        	echo json_encode($data);
+		} else if ($param1=="hapus") {
+			$id = $this->input->post("id");
+			$this->menu->delete_by_id($id);
+       		echo json_encode(array("status" => TRUE));
+		} else if ($param1=="list") {
+			$list = $this->menu->get_datatables();
+	        $data = array();
+	        $no = $_POST['start'];
+	        foreach ($list as $r) {
+	            $no++;
+	            $row = array();
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id_menu."'>";
+	            $row[] = $no;
+	            $row[] = $r->id_menu;
+	            $row[] = $r->name;
+	            $row[] = $r->url;
+	            $row[] = $r->judul;
+	            $row[] = $r->parent_name;
+	            //add html for action
+	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id_menu."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id_menu."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
+	 
+	            $data[] = $row;
+	        }
+	 
+	        $output = array(
+	                        "sEcho" => $_POST['draw'],
+	                        "iTotalRecords" => $this->menu->count_all(),
+	                        "iTotalDisplayRecords" => $this->menu->count_filtered(),
+	                        "aaData" => $data,
+	                );
+	        //output to json format
+	        echo json_encode($output);			
+		} else {
+		  	$data = array(
+				'main_menu' => $this->query_menu,
+				'p'			=> 'admin/menu_view',
+				'link1'		=> 'Admin',
+				'link2'		=> 'menu',
+				'menu'		=> $this->loadmenu()
+			);
+			$this->load->view("admin_view",$data);
+		}
+	}
+
+	#akun
+	public function akun($param1="") {
+		$this->validate_admin();
+		if ($param1=="tambah") {
+			// $data = array(
+   //            'username'    => $this->input->post('username', TRUE),
+   //            'email' 		=> $this->input->post('email', TRUE),
+   //            'password' 	=> $this->input->post('password', TRUE),
+   //          );
+        	// $insert = $this->akun->save($data);
+
+            // create user akun dengan ion auth
+            $username 	= $this->input->post('username', TRUE);
+            $email 		= $this->input->post('email', TRUE);
+            $password 	= $this->input->post('password', TRUE);
+
+            $additional_data = array(
+								'first_name' => 'RSUD',
+								'last_name' => 'Pariaman',
+								);
+			$group = array($this->input->post('user_group', TRUE)); // Sets user to admin.
+			$this->ion_auth->register($username, $password, $email, $additional_data, $group);
+        
+        	echo json_encode(array("status" => TRUE));
+		} else if ($param1=="ubah") {
+			$data = array(
+              'username'    => $this->input->post('username', TRUE),
+              'email' 		=> $this->input->post('email', TRUE),
+            );
+            $password =  $this->input->post('password', TRUE);
+            if ($password!='initial') {
+            	$data['password'] = $password;
+            }
+
+	        $this->ion_auth->update($this->input->post("id_pk"), $data);
+	        echo json_encode(array("status" => TRUE));
+			
+		} else if ($param1=="edit") {
+			$id = $this->input->post("id");
+			$data = $this->akun->get_by_id($id);
+        	echo json_encode($data);
+		} else if ($param1=="hapus") {
+			$id = $this->input->post("id");
+			$this->ion_auth->delete_user($id);
+       		echo json_encode(array("status" => TRUE));
+		} else if ($param1=="list") {
+			$list = $this->akun->get_datatables();
+	        $data = array();
+	        $no = $_POST['start'];
+	        foreach ($list as $r) {
+	            $no++;
+	            $row = array();
+	            $row[] = "<input type='checkbox' class='data-check' value='".$r->id."'>";
+	            $row[] = $no;
+	            $row[] = $r->username;
+	            $row[] = $r->email;
+	            $row[] = $r->password;
+	            //add html for action
+	            $row[] = '<button class="btn btn-xs btn-info" data-rel="tooltip" title="Edit" onclick="update('."'".$r->id."'".')"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+	                  <a class="btn btn-xs btn-danger" data-rel="tooltip" title="Hapus" onclick="hapus('."'".$r->id."'".')"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>';
+	 
+	            $data[] = $row;
+	        }
+	 
+	        $output = array(
+	                        "sEcho" => $_POST['draw'],
+	                        "iTotalRecords" => $this->akun->count_all(),
+	                        "iTotalDisplayRecords" => $this->akun->count_filtered(),
+	                        "aaData" => $data,
+	                );
+	        //output to json format
+	        echo json_encode($output);			
+		} else {
+		  	$data = array(
+				'main_menu' => $this->query_menu,
+				'p'			=> 'admin/akun_view',
+				'link1'		=> 'Admin',
+				'link2'		=> 'akun',
+				'group'		=> $this->loadGroup()
+			);
+			$this->load->view("admin_view",$data);
+		}
+	}
+
 	
+	function validate_admin() {
+		if (!$this->ion_auth->in_group('admin')) {
+			$this->session->set_flashdata('message', 'You must be an admin to view this page');
+			redirect('admin');
+		}
+	}
 	function loadPaviliun() {
 		$data_paviliun = $this->paviliun->getPaviliun();
 		return $data_paviliun->result();
@@ -313,6 +481,16 @@ class Admin extends CI_Controller {
 	function loadKamar($id="") {
 		$data_kamar = $this->kamar->getKamar($id)->result();
 		echo json_encode($data_kamar);
+	}
+
+	function loadMenu() {
+		$data_menu = $this->menu->getMenu()->result();
+		return $data_menu;
+	}
+
+	function loadGroup() {
+		$data_akun = $this->akun->getGroup();
+		return $data_akun->result();
 	}
 	
 
