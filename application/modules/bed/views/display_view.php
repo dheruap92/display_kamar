@@ -15,6 +15,8 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/AdminLTE-2.3.11/dist/css/AdminLTE.min.css">
 
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans' rel='stylesheet' type='text/css'>
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -24,8 +26,10 @@
 
   <style>
     body {
-      background-color: #B1B5BE;
-      padding: 10px;
+        border-top : 1px solid #e56038;
+        background : #ebe8de;
+        font-family : 'Open Sans', sans-serif;
+        color : #333333;
     }
     td {
       font-size: 35px;
@@ -42,19 +46,24 @@
       font-size : 50px;
       font-weight : bold;
       text-align: center;
+      color : #e56038;
     }
     .text-pengumuman {
       font-size: 22px;
       font-weight: bold;
+    }
+    .judul {
+      font-family : 'Baumans',cursive;
+      color : #e56038;
     }
   </style>
 
 </head>
 <body>
 <!-- Automatic element centering -->
-  <div class="row">
-    <div class="col-xs-12">
-        <center><h1>Display Kamar RSUD Pariaman</h1></center>
+  <div class="jumbotron" style="padding:5px">
+    <div class="container" style="padding:0px">
+      <h1 class="judul">Display Kamar RSUD Pariaman</h1>
     </div>
   </div>
   <div class="row" >
